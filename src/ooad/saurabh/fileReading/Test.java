@@ -66,28 +66,32 @@ public class Test {
 		
 		while(sc.hasNext()) { //prints line of inputFile.
 			String tempStr   = sc.next();
+			System.out.println("----------------------------------");
 			System.out.println(tempStr);
 			
 			int x_coordinate = getCoordinates(tempStr, 0);
 			int y_coordinate = getCoordinates(tempStr, 1);
 			
 			String leftKey   = getKeyByValue(hmap2, x_coordinate);			
-			System.out.println("Left-key = " + leftKey);
+//			System.out.println("From = " + leftKey);
 			
-			int leftRowCoordinate = getCoordinates(leftKey, 0);
-			System.out.println("Row Coordinate = " + leftRowCoordinate);
+			int fromRow = getCoordinates(leftKey, 0);
+			System.out.println("From Row    = " + fromRow);
 			
-			int leftColCoordinate = getCoordinates(leftKey, 1);		
-			System.out.println("Column Coordinate = " + leftColCoordinate);
+			int fromCol = getCoordinates(leftKey, 1);		
+			System.out.println("From Column = " + fromCol);
+			
+			System.out.println("----------------------------------");
 			
 			String rightKey   = getKeyByValue(hmap2, y_coordinate);
-			System.out.println("Right-key = " + rightKey);
+//			System.out.println("To = " + rightKey);
 			
-			int rightRowCoordinate = getCoordinates(rightKey, 0);
-			System.out.println("Row Coordinate = " + rightRowCoordinate);
+			int toRow = getCoordinates(rightKey, 0);
+			System.out.println("To Row    = " + toRow);
 			
-			int rightColCoordinate = getCoordinates(rightKey, 1);		
-			System.out.println("Column Coordinate = " + rightColCoordinate);
+			int toCol = getCoordinates(rightKey, 1);		
+			System.out.println("To Column = " + toCol);
+			System.out.println("----------------------------------");
 		}
 		sc.close();		
 	}//end of main method
