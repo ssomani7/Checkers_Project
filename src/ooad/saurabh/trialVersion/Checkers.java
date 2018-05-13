@@ -31,7 +31,7 @@ public class Checkers extends JPanel{
 	    * the only thing that is done in the main Checkers class.)
 	    */
 	public Checkers() {	      
-		      setLayout(null);
+		      setLayout(null); //Use some other layout
 		      setPreferredSize( new Dimension(350,250) );	      
 		      setBackground(new Color(0,150,0));  // Dark green background.
 		      

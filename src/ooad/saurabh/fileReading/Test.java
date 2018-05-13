@@ -1,7 +1,9 @@
 package ooad.saurabh.fileReading;
 
+import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,16 +34,12 @@ public class Test {
 				}
 			}// inner for-loop for columns
 		}// outer for-loop for rows
-		
-//		for (HashMap.Entry<String, Integer> entry : hmap1.entrySet()) {
-//		    System.out.println(entry.getKey()+" : "+entry.getValue());
-//		}
 		return hmap1;		
-	}
+	}//end of method matrix
+	
 	
 	public static String getKeyByValue(Map<String, Integer> hmap2, Integer value) {
         for (Entry<String, Integer> entry : hmap2.entrySet()) {
-
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }
@@ -49,13 +47,49 @@ public class Test {
         return null;
 	}
 	
+	
 	public static int getCoordinates(String key, int position) {
 		String[] arrOfStr = key.split("-");	
 		return Integer.parseInt(arrOfStr[position]);
-	}
+	}//end of method getCoordinates
+	
+	
+	public static void displayFromTo(List<String> movesToBeSimulated) {
+		for(String ptr : movesToBeSimulated) {
+			System.out.println("Moves to be Simulated --> " + ptr);
+		}		
+	}//end of method displayFromTo
+	
+	
+	public static void boardCoordinates(List<String> movesToBeSimulated) {
+		String[] boardFromToValues = new String[movesToBeSimulated.size()];
+		boardFromToValues          = movesToBeSimulated.toArray(boardFromToValues);
+		
+		for(String ptr:boardFromToValues) {
+			System.out.println("boardFromToValues --> " + ptr);
+		}
+		System.out.println("----------------------------------");
+		splitter(boardFromToValues);
+	}//end of method boardCoordinates
+	
+	
+	public static void splitter(String[] boardFromToValues) {
+		int fromRow, fromCol;
+		String[] temp = boardFromToValues[0].split(":");
+		
+		for(String ptr:temp) {
+			System.out.println("Splitter --> " + ptr);
+			fromRow = getCoordinates(ptr, 0);
+			System.out.println("row = " + fromRow);
+			fromCol = getCoordinates(ptr, 1);
+			System.out.println("col = " + fromCol);
+		}		
+	}//end of method splitter
+	
 	
 	public static void main(String[] args) {
 		Map<String, Integer> hmap2 = matrix();
+		List<String> movesToBeSimulated = new ArrayList<String>();
 	    File file = new File("/Users/saurabhsomani/Desktop/checkersInput.txt");
 	    Scanner sc = null;
 		try {
@@ -92,8 +126,14 @@ public class Test {
 			int toCol = getCoordinates(rightKey, 1);		
 			System.out.println("To Column = " + toCol);
 			System.out.println("----------------------------------");
-		}
-		sc.close();		
+			
+			String tempFromTo = leftKey + ':' + rightKey;
+			movesToBeSimulated.add(tempFromTo);
+		}		
+		sc.close();
+		displayFromTo(movesToBeSimulated);
+		System.out.println("----------------------------------");
+		boardCoordinates(movesToBeSimulated);
 	}//end of main method
 
 }//end of class Test

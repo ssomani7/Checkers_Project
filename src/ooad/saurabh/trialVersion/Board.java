@@ -27,7 +27,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 									// the game by resigning.
 	private JButton newGameButton;  // Button for starting a new game.
 	private JButton nextButton;     // Button for simulating next move
-	private JLabel message;        //  Label for displaying messages to the user.
+	private JLabel  message;        //  Label for displaying messages to the user.
 	
 	public JButton getNextButton() {
 		return nextButton;
@@ -359,11 +359,32 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent evt) {
        Object src = evt.getSource();
-       if (src == newGameButton)
+       if (src == newGameButton) {
           doNewGame();
-       else if (src == resignButton)
+       }
+       else if (src == resignButton) {
           doResign();
+       }
+       else if (src == nextButton) { //else-if added by Saurabh
+    	  doSimulateMove(); 
+       }
     }//end of method actionPerformed
+    
+    //simulateMove added by Saurabh
+    public void doSimulateMove() {
+    	if(gameInProgress == false) {
+    		message.setText("Click \"New Game\" to start a new game.");
+    	} else {
+    		//code
+//    		  int col = (evt.getX() - 2) / 20;
+//            int row = (evt.getY() - 2) / 20;
+//            System.out.println("mousePressed method row = " + row); //testing purposes
+//            System.out.println("mousePressed method col = " + col); //testing purposes
+//            System.out.println("-------------------------------"); //testing purposes
+//            if (col >= 0 && col < 8 && row >= 0 && row < 8)
+//               doClickSquare(row,col);
+    	}
+    }
     
 	@Override
 	public void mouseClicked(MouseEvent e) {
