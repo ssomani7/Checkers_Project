@@ -68,23 +68,28 @@ public class Test {
 		for(String ptr:boardFromToValues) {
 			System.out.println("boardFromToValues --> " + ptr);
 		}
-		System.out.println("----------------------------------");
-		splitter(boardFromToValues);
+//		System.out.println("----------------------------------");
+//		System.out.println("Length --> " + boardFromToValues.length);
+//		System.out.println("----------------------------------");
+		rowColSplitter(boardFromToValues);
 	}//end of method boardCoordinates
 	
 	
-	public static void splitter(String[] boardFromToValues) {
-		int fromRow, fromCol;
-		String[] temp = boardFromToValues[0].split(":");
-		
-		for(String ptr:temp) {
-			System.out.println("Splitter --> " + ptr);
-			fromRow = getCoordinates(ptr, 0);
-			System.out.println("row = " + fromRow);
-			fromCol = getCoordinates(ptr, 1);
-			System.out.println("col = " + fromCol);
-		}		
-	}//end of method splitter
+	public static void rowColSplitter(String[] boardFromToValues) {
+		int fromRow, fromCol;		
+		for(int i = 0; i < boardFromToValues.length; i++) {
+			String[] temp1 = boardFromToValues[i].split(":");
+			for(String ptr:temp1) {
+				System.out.println("Splitter --> " + ptr);
+				fromRow = getCoordinates(ptr, 0);
+				System.out.println("row = " + fromRow);
+				fromCol = getCoordinates(ptr, 1);
+				System.out.println("col = " + fromCol);
+				System.out.println("----------------------------------");
+			}
+//			System.out.println("**********outer for loop*******");
+		}
+	}//end of method rowColSplitter
 	
 	
 	public static void main(String[] args) {
@@ -100,8 +105,8 @@ public class Test {
 		
 		while(sc.hasNext()) { //prints line of inputFile.
 			String tempStr   = sc.next();
-			System.out.println("----------------------------------");
-			System.out.println(tempStr);
+//			System.out.println("----------------------------------");
+//			System.out.println(tempStr);
 			
 			int x_coordinate = getCoordinates(tempStr, 0);
 			int y_coordinate = getCoordinates(tempStr, 1);
@@ -109,30 +114,30 @@ public class Test {
 			String leftKey   = getKeyByValue(hmap2, x_coordinate);			
 //			System.out.println("From = " + leftKey);
 			
-			int fromRow = getCoordinates(leftKey, 0);
-			System.out.println("From Row    = " + fromRow);
+//			int fromRow = getCoordinates(leftKey, 0);
+//			System.out.println("From Row    = " + fromRow);
 			
-			int fromCol = getCoordinates(leftKey, 1);		
-			System.out.println("From Column = " + fromCol);
+//			int fromCol = getCoordinates(leftKey, 1);		
+//			System.out.println("From Column = " + fromCol);
 			
-			System.out.println("----------------------------------");
+//			System.out.println("----------------------------------");
 			
 			String rightKey   = getKeyByValue(hmap2, y_coordinate);
 //			System.out.println("To = " + rightKey);
 			
-			int toRow = getCoordinates(rightKey, 0);
-			System.out.println("To Row    = " + toRow);
+//			int toRow = getCoordinates(rightKey, 0);
+//			System.out.println("To Row    = " + toRow);
 			
-			int toCol = getCoordinates(rightKey, 1);		
-			System.out.println("To Column = " + toCol);
-			System.out.println("----------------------------------");
+//			int toCol = getCoordinates(rightKey, 1);		
+//			System.out.println("To Column = " + toCol);
+//			System.out.println("----------------------------------");
 			
 			String tempFromTo = leftKey + ':' + rightKey;
 			movesToBeSimulated.add(tempFromTo);
 		}		
 		sc.close();
-		displayFromTo(movesToBeSimulated);
-		System.out.println("----------------------------------");
+//		displayFromTo(movesToBeSimulated);
+
 		boardCoordinates(movesToBeSimulated);
 	}//end of main method
 

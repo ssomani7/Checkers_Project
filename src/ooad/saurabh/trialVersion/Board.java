@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -84,26 +85,38 @@ public class Board extends JPanel implements ActionListener, MouseListener{
       * clicks and for clicks on the buttons.  Create the board and
       * start the first game.
      */
+	
+	ReadFromFile inputMoves; // String[] object conatining Strings('fromRow-fromCol:toRow-toCol')
+	String[] boardFromToValues; //Added on May 13th
+	int counter = 0; //Added on May 13th
+	int loopPtr = 0; //Added on May 13th
+	
     Board() {
        setBackground(Color.BLACK);
        addMouseListener(this);
        
-       resignButton  = new JButton("Resign");
+       resignButton      = new JButton("Resign");
        resignButton.addActionListener(this);
        
-       newGameButton = new JButton("New Game");
+       newGameButton     = new JButton("New Game");
        newGameButton.addActionListener(this);
        
-       nextButton    = new JButton("Next");
-       //nextButton.addActionListener(this);
+       nextButton        = new JButton("Next"); //added by Saurabh
+       nextButton.addActionListener(this);  //added by Saurabh
        
-       message       = new JLabel("",JLabel.CENTER);
+       message           = new JLabel("",JLabel.CENTER);
        message.setFont(new  Font("Serif", Font.BOLD, 14));
        message.setForeground(Color.green);
        
-       board         = new CheckersData();
+       board             = new CheckersData();
+       
+       inputMoves        = new ReadFromFile(); //added by Saurabh
+       boardFromToValues = inputMoves.readInput(); //added on may 13th
+       counter           = boardFromToValues.length;
+       
        doNewGame();
     }//end of constructor
+        
     /**
      * Start a new game
      */
@@ -125,6 +138,78 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     }//end of method doNewGame
     
     /**
+     * Respond to user's click on one of the three buttons.
+     */
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+       Object src = evt.getSource();
+       if (src == newGameButton) {
+          doNewGame();
+       }
+       else if (src == resignButton) {
+          doResign();
+       }
+       else if (src == nextButton) { //else-if added by Saurabh
+//    	  System.out.println("----------------------------------------------"); 
+    	  System.out.println("*********nextButton Clicked*************"); 
+    	  doSimulateMove(); 
+       }
+    }//end of method actionPerformed
+   
+    //simulateMove added by Saurabh
+    public void doSimulateMove() {
+    	if(gameInProgress == false) {
+    		message.setText("Click \"New Game\" to start a new game.");
+    		return;
+    	} else {
+    		//add code below   			
+    		 int row, col;
+    		 boolean moveValidation = false;   			
+    		 if(counter > 0) { //loopPtr set globally at 0
+    			String[] tempBoardFromToValues = boardFromToValues[loopPtr].split(":"); 
+    			int fromRow = inputMoves.getCoordinates(tempBoardFromToValues[0], 0); //testing purposes
+    			int fromCol = inputMoves.getCoordinates(tempBoardFromToValues[0], 1); //testing purposes
+    			int toRow   = inputMoves.getCoordinates(tempBoardFromToValues[1], 0); //testing purposes
+    			int toCol   = inputMoves.getCoordinates(tempBoardFromToValues[1], 1); //testing purposes
+    			   		
+    			for (int i = 0; i < legalMoves.length; i++) { //testing purposes
+		           if (legalMoves[i].fromRow == fromRow && legalMoves[i].fromCol == fromCol
+		                 && legalMoves[i].toRow == toRow && legalMoves[i].toCol == toCol) {
+		                 moveValidation = true;
+		           } 
+		        }
+    			  
+    			if(moveValidation) { //if-loop added on May 14th
+        			for(String ptr : tempBoardFromToValues) { //for-loop works fine even without if loop
+        				System.out.println("Splitter --> " + ptr);
+        				row = inputMoves.getCoordinates(ptr, 0);
+        				System.out.println("row = " + row);
+        				col = inputMoves.getCoordinates(ptr, 1);
+        				System.out.println("col = " + col);
+        				System.out.println("----------------------------------");
+    		            if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+    		            	doClickSquare(row,col);
+    		            }
+        			}
+    			} else { //added on May 14th
+    				JOptionPane.showMessageDialog(null, fromRow + "," + fromCol + " --> " + toRow
+    						+ "," + toCol + " is an Invalid Move !");
+    			}
+     			
+     			loopPtr = loopPtr + 1;
+     			System.out.println("loopPtr --> " + loopPtr);
+     			counter = counter - 1;
+     			System.out.println("counter --> " + counter);
+     			System.out.println("----------------------------------");
+    		 } else {
+    			 counter = boardFromToValues.length;
+    			 loopPtr = 0;
+    			 JOptionPane.showMessageDialog(null, "End of Input moves");
+    		 }
+    	}//end of else
+    }//end of method doSimulateMove
+      
+    /**
      * Respond to a user click on the board.  If no game is in progress, show 
      * an error message.  Otherwise, find the row and column that the user 
      * clicked and call doClickSquare() to handle it.
@@ -136,11 +221,14 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        else {
           int col = (evt.getX() - 2) / 20;
           int row = (evt.getY() - 2) / 20;
-          System.out.println("mousePressed method row = " + row); //testing purposes
-          System.out.println("mousePressed method col = " + col); //testing purposes
-          System.out.println("-------------------------------"); //testing purposes
-          if (col >= 0 && col < 8 && row >= 0 && row < 8)
+//          System.out.println("mousePressed method row = " + row); //testing purposes
+//          System.out.println("mousePressed method col = " + col); //testing purposes
+//          System.out.println("-------------------------------"); //testing purposes
+          if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+//        	 System.out.println("Inside mousePressed, calling doClickSquare !!!!");
+//        	 System.out.println("----------------------------------");
              doClickSquare(row,col);
+          }
        }
     }// end of method mousePressed
 	        
@@ -154,31 +242,34 @@ public class Board extends JPanel implements ActionListener, MouseListener{
         can move, mark this row and column as selected and return.  (This
         might change a previous selection.)  Reset the message, in
         case it was previously displaying an error message. */      
-       for (int i = 0; i < legalMoves.length; i++)
+       for (int i = 0; i < legalMoves.length; i++) {
           if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
              selectedRow = row;
              selectedCol = col;
              if (currentPlayer == CheckersData.RED)
-                message.setText("RED:  Make your move doClickSquare.");
+                message.setText("RED:  Make your move doClickSquare RED Player.");
              else
-                message.setText("BLACK:  Make your move doClickSquare.");
+                message.setText("BLACK:  Make your move doClickSquare Black Player.");
              repaint();
              return;
-          }       
+          }
+       }
        /* If no piece has been selected to be moved, the user must first
         select a piece.  Show an error message and return. */     
        if (selectedRow < 0) {
+    	  System.out.println("*****selectedRow value is < 0*****");
           message.setText("Click the piece you want to move.");
           return;
        }     
        /* If the user clicked on a squre where the selected piece can be
         legally moved, then make the move and return. */     
-       for (int i = 0; i < legalMoves.length; i++)
+       for (int i = 0; i < legalMoves.length; i++) {
           if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol
                 && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
              doMakeMove(legalMoves[i]);
              return;
-          }     
+          }
+       }
        /* If we get to this point, there is a piece selected, and the square where
         the user just clicked is not one where that piece can be legally moved.
         Show an error message. */       
@@ -200,12 +291,18 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        if (move.isJump()) {
           legalMoves = board.getLegalJumpsFrom(currentPlayer,move.toRow,move.toCol);
           if (legalMoves != null) {
-             if (currentPlayer == CheckersData.RED)
+             if (currentPlayer == CheckersData.RED) {
                 message.setText("RED:  You must continue jumping.");
-             else
+             }
+             else {
                 message.setText("BLACK:  You must continue jumping.");
+             }
              selectedRow = move.toRow;  // Since only one piece can be moved, select it.
              selectedCol = move.toCol;
+             System.out.println("----------------------------------");
+             System.out.println("*****isJump() selectRow   = " + selectedRow);
+             System.out.println("*****isJump() selectedCol = " + selectedCol);
+             System.out.println("----------------------------------");
              repaint();
              return;
           }
@@ -216,37 +313,44 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        if (currentPlayer == CheckersData.RED) {
           currentPlayer = CheckersData.BLACK;
           legalMoves = board.getLegalMoves(currentPlayer);
-          if (legalMoves == null)
+          if (legalMoves == null) {
              gameOver("BLACK has no moves.  RED wins.");
-          else if (legalMoves[0].isJump())
+          }
+          else if (legalMoves[0].isJump()) {
              message.setText("BLACK:  Make your move.  You must jump doMakeMove.");
-          else
+          }
+          else {
              message.setText("BLACK:  Make your move doMakeMove.");
+          }
        }
        else {
           currentPlayer = CheckersData.RED;
           legalMoves = board.getLegalMoves(currentPlayer);
-          if (legalMoves == null)
+          if (legalMoves == null) {
              gameOver("RED has no moves.  BLACK wins.");
-          else if (legalMoves[0].isJump())
+          }
+          else if (legalMoves[0].isJump()) {
              message.setText("RED:  Make your move.  You must jump doMakeMove.");
-          else
+          }
+          else {
              message.setText("RED:  Make your move doMakeMove."); //added to print statement
+          }
        }     
        /* Set selectedRow = -1 to record that the player has not yet selected
         a piece to move. */      
        selectedRow = -1;     
        /* As a courtesy to the user, if all legal moves use the same piece, then
-        select that piece automatically so the use won't have to click on it
+        select that piece automatically so the user won't have to click on it
         to select it. */       
        if (legalMoves != null) {
           boolean sameStartSquare = true;
-          for (int i = 1; i < legalMoves.length; i++)
+          for (int i = 1; i < legalMoves.length; i++) {
              if (legalMoves[i].fromRow != legalMoves[0].fromRow
                    || legalMoves[i].fromCol != legalMoves[0].fromCol) {
                 sameStartSquare = false;
                 break;
              }
+          }
           if (sameStartSquare) {
              selectedRow = legalMoves[0].fromRow;
              selectedCol = legalMoves[0].fromCol;
@@ -352,39 +456,6 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        gameInProgress = false;
     }//end of method gameOver
 
-    
-    /**
-     * Respond to user's click on one of the two buttons.
-     */
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-       Object src = evt.getSource();
-       if (src == newGameButton) {
-          doNewGame();
-       }
-       else if (src == resignButton) {
-          doResign();
-       }
-       else if (src == nextButton) { //else-if added by Saurabh
-    	  doSimulateMove(); 
-       }
-    }//end of method actionPerformed
-    
-    //simulateMove added by Saurabh
-    public void doSimulateMove() {
-    	if(gameInProgress == false) {
-    		message.setText("Click \"New Game\" to start a new game.");
-    	} else {
-    		//code
-//    		  int col = (evt.getX() - 2) / 20;
-//            int row = (evt.getY() - 2) / 20;
-//            System.out.println("mousePressed method row = " + row); //testing purposes
-//            System.out.println("mousePressed method col = " + col); //testing purposes
-//            System.out.println("-------------------------------"); //testing purposes
-//            if (col >= 0 && col < 8 && row >= 0 && row < 8)
-//               doClickSquare(row,col);
-    	}
-    }
     
 	@Override
 	public void mouseClicked(MouseEvent e) {
