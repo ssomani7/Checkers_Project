@@ -150,7 +150,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
           doResign();
        }
        else if (src == nextButton) { //else-if added by Saurabh
-//    	  System.out.println("----------------------------------------------"); 
+    	  System.out.println("----------------------------------------------"); 
     	  System.out.println("*********nextButton Clicked*************"); 
     	  doSimulateMove(); 
        }
@@ -225,8 +225,6 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 //          System.out.println("mousePressed method col = " + col); //testing purposes
 //          System.out.println("-------------------------------"); //testing purposes
           if (col >= 0 && col < 8 && row >= 0 && row < 8) {
-//        	 System.out.println("Inside mousePressed, calling doClickSquare !!!!");
-//        	 System.out.println("----------------------------------");
              doClickSquare(row,col);
           }
        }
