@@ -139,16 +139,36 @@ public class CheckersData {
           for (int col = 0; col < 8; col++) {
              if (board[row][col] == player || board[row][col] == playerKing) {
                 if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
-                   moves.add(new CheckersMove(row, col, row+2, col+2));
+//                   moves.add(new CheckersMove(row, col, row+2, col+2));
+                   if(canJump(player, row+2, col+2, row+3, col+3, row+4, col+4)) {
+                	   moves.add(new CheckersMove(row, col, row+4, col+4));
+                   } else {
+                	   moves.add(new CheckersMove(row, col, row+2, col+2));
+                   }
                 }
                 if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
-                   moves.add(new CheckersMove(row, col, row-2, col+2));
+//                   moves.add(new CheckersMove(row, col, row-2, col+2));
+                    if(canJump(player, row-2, col+2, row-3, col+3, row-4, col+4)) {
+                 	   moves.add(new CheckersMove(row, col, row-4, col+4));
+                    } else {
+                 	   moves.add(new CheckersMove(row, col, row-2, col+2));
+                    }
                 }
                 if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
-                   moves.add(new CheckersMove(row, col, row+2, col-2));
+//                   moves.add(new CheckersMove(row, col, row+2, col-2));
+                   if(canJump(player, row+2, col-2, row+3, col-3, row+4, col-4)) {
+                	   moves.add(new CheckersMove(row, col, row+4, col-4));
+                   } else {
+                	   moves.add(new CheckersMove(row, col, row+2, col-2));
+                   }
                 }
                 if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
-                   moves.add(new CheckersMove(row, col, row-2, col-2));
+//                   moves.add(new CheckersMove(row, col, row-2, col-2));
+                   if(canJump(player, row-2, col-2, row-3, col-3, row-4, col-4)) {
+                	   moves.add(new CheckersMove(row, col, row-4, col-4));
+                   } else {
+                	   moves.add(new CheckersMove(row, col, row-2, col-2));
+                   }
                 }
              }
           }
@@ -222,16 +242,36 @@ public class CheckersData {
        
        if (board[row][col] == player || board[row][col] == playerKing) {
           if (canJump(player, row, col, row+1, col+1, row+2, col+2)) {
-             moves.add(new CheckersMove(row, col, row+2, col+2));
+//             moves.add(new CheckersMove(row, col, row+2, col+2));
+             if(canJump(player, row+2, col+2, row+3, col+3, row+4, col+4)) {
+          	   moves.add(new CheckersMove(row, col, row+4, col+4));
+             } else {
+          	   moves.add(new CheckersMove(row, col, row+2, col+2));
+             }
           }
           if (canJump(player, row, col, row-1, col+1, row-2, col+2)) {
-             moves.add(new CheckersMove(row, col, row-2, col+2));
+//             moves.add(new CheckersMove(row, col, row-2, col+2));
+             if(canJump(player, row-2, col+2, row-3, col+3, row-4, col+4)) {
+           	   moves.add(new CheckersMove(row, col, row-4, col+4));
+              } else {
+           	   moves.add(new CheckersMove(row, col, row-2, col+2));
+              }
           }
           if (canJump(player, row, col, row+1, col-1, row+2, col-2)) {
-             moves.add(new CheckersMove(row, col, row+2, col-2));
+//             moves.add(new CheckersMove(row, col, row+2, col-2));
+             if(canJump(player, row+2, col-2, row+3, col-3, row+4, col-4)) {
+          	   moves.add(new CheckersMove(row, col, row+4, col-4));
+             } else {
+          	   moves.add(new CheckersMove(row, col, row+2, col-2));
+             }
           }
           if (canJump(player, row, col, row-1, col-1, row-2, col-2)) {
-             moves.add(new CheckersMove(row, col, row-2, col-2));
+//             moves.add(new CheckersMove(row, col, row-2, col-2));
+             if(canJump(player, row-2, col-2, row-3, col-3, row-4, col-4)) {
+          	   moves.add(new CheckersMove(row, col, row-4, col-4));
+             } else {
+          	   moves.add(new CheckersMove(row, col, row-2, col-2));
+             }
           }
        }
        if (moves.size() == 0) {
