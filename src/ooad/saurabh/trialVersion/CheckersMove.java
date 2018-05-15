@@ -11,7 +11,7 @@ class CheckersMove {
    int toRow, toCol;      // Square it is to move to.
    
    CheckersMove(int r1, int c1, int r2, int c2) {
-           // Constructor.  Just set the values of the instance variables.
+   // Just set the values of the instance variables.
       fromRow = r1;
       fromCol = c1;
       toRow   = r2;

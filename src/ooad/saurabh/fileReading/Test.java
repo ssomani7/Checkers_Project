@@ -68,9 +68,6 @@ public class Test {
 		for(String ptr:boardFromToValues) {
 			System.out.println("boardFromToValues --> " + ptr);
 		}
-//		System.out.println("----------------------------------");
-//		System.out.println("Length --> " + boardFromToValues.length);
-//		System.out.println("----------------------------------");
 		rowColSplitter(boardFromToValues);
 	}//end of method boardCoordinates
 	
@@ -95,6 +92,7 @@ public class Test {
 	public static void main(String[] args) {
 		Map<String, Integer> hmap2 = matrix();
 		List<String> movesToBeSimulated = new ArrayList<String>();
+		List<String> inputMovesFromFile = new ArrayList<String>();
 	    File file = new File("/Users/saurabhsomani/Desktop/checkersInput.txt");
 	    Scanner sc = null;
 		try {
@@ -104,34 +102,12 @@ public class Test {
 		}
 		
 		while(sc.hasNext()) { //prints line of inputFile.
-			String tempStr   = sc.next();
-//			System.out.println("----------------------------------");
-//			System.out.println(tempStr);
-			
-			int x_coordinate = getCoordinates(tempStr, 0);
-			int y_coordinate = getCoordinates(tempStr, 1);
-			
-			String leftKey   = getKeyByValue(hmap2, x_coordinate);			
-//			System.out.println("From = " + leftKey);
-			
-//			int fromRow = getCoordinates(leftKey, 0);
-//			System.out.println("From Row    = " + fromRow);
-			
-//			int fromCol = getCoordinates(leftKey, 1);		
-//			System.out.println("From Column = " + fromCol);
-			
-//			System.out.println("----------------------------------");
-			
-			String rightKey   = getKeyByValue(hmap2, y_coordinate);
-//			System.out.println("To = " + rightKey);
-			
-//			int toRow = getCoordinates(rightKey, 0);
-//			System.out.println("To Row    = " + toRow);
-			
-//			int toCol = getCoordinates(rightKey, 1);		
-//			System.out.println("To Column = " + toCol);
-//			System.out.println("----------------------------------");
-			
+			String tempStr    = sc.next();
+			inputMovesFromFile.add(tempStr);
+			int x_coordinate  = getCoordinates(tempStr, 0);
+			int y_coordinate  = getCoordinates(tempStr, 1);	
+			String leftKey    = getKeyByValue(hmap2, x_coordinate);						
+			String rightKey   = getKeyByValue(hmap2, y_coordinate);			
 			String tempFromTo = leftKey + ':' + rightKey;
 			movesToBeSimulated.add(tempFromTo);
 		}		

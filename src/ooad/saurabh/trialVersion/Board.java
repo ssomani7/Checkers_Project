@@ -28,7 +28,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 									// the game by resigning.
 	private JButton newGameButton;  // Button for starting a new game.
 	private JButton nextButton;     // Button for simulating next move
-	private JLabel  message;        //  Label for displaying messages to the user.
+	private JLabel  message;        // Label for displaying messages to the user.
 	
 	public JButton getNextButton() {
 		return nextButton;
@@ -90,6 +90,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 	String[] boardFromToValues; //Added on May 13th
 	int counter = 0; //Added on May 13th
 	int loopPtr = 0; //Added on May 13th
+	String[] inputMovesFromFile;//Added on May 14th
 	
     Board() {
        setBackground(Color.BLACK);
@@ -113,6 +114,8 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        inputMoves        = new ReadFromFile(); //added by Saurabh
        boardFromToValues = inputMoves.readInput(); //added on may 13th
        counter           = boardFromToValues.length;
+       
+       inputMovesFromFile = inputMoves.boardCoordinates(inputMoves.inputMovesFromFile); //testing purposes
        
        doNewGame();
     }//end of constructor
@@ -154,23 +157,22 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     	  System.out.println("*********nextButton Clicked*************"); 
     	  doSimulateMove(); 
        }
-    }//end of method actionPerformed
+    }//end of method actionPerformed()
    
     //simulateMove added by Saurabh
     public void doSimulateMove() {
     	if(gameInProgress == false) {
     		message.setText("Click \"New Game\" to start a new game.");
     		return;
-    	} else {
-    		//add code below   			
+    	} else { 			
     		 int row, col;
     		 boolean moveValidation = false;   			
-    		 if(counter > 0) { //loopPtr set globally at 0
+    		 if(counter > 0) {
     			String[] tempBoardFromToValues = boardFromToValues[loopPtr].split(":"); 
-    			int fromRow = inputMoves.getCoordinates(tempBoardFromToValues[0], 0); //testing purposes
-    			int fromCol = inputMoves.getCoordinates(tempBoardFromToValues[0], 1); //testing purposes
-    			int toRow   = inputMoves.getCoordinates(tempBoardFromToValues[1], 0); //testing purposes
-    			int toCol   = inputMoves.getCoordinates(tempBoardFromToValues[1], 1); //testing purposes
+    			int fromRow = inputMoves.getCoordinates(tempBoardFromToValues[0], 0); 
+    			int fromCol = inputMoves.getCoordinates(tempBoardFromToValues[0], 1); 
+    			int toRow   = inputMoves.getCoordinates(tempBoardFromToValues[1], 0); 
+    			int toCol   = inputMoves.getCoordinates(tempBoardFromToValues[1], 1); 
     			   		
     			for (int i = 0; i < legalMoves.length; i++) { //testing purposes
 		           if (legalMoves[i].fromRow == fromRow && legalMoves[i].fromCol == fromCol
@@ -179,8 +181,8 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 		           } 
 		        }
     			  
-    			if(moveValidation) { //if-loop added on May 14th
-        			for(String ptr : tempBoardFromToValues) { //for-loop works fine even without if loop
+    			if(moveValidation) { 
+        			for(String ptr : tempBoardFromToValues) { 
         				System.out.println("Splitter --> " + ptr);
         				row = inputMoves.getCoordinates(ptr, 0);
         				System.out.println("row = " + row);
@@ -191,11 +193,10 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     		            	doClickSquare(row,col);
     		            }
         			}
-    			} else { //added on May 14th
-    				JOptionPane.showMessageDialog(null, fromRow + "," + fromCol + " --> " + toRow
-    						+ "," + toCol + " is an Invalid Move !");
+    			} else { 
+    				JOptionPane.showMessageDialog(null, inputMovesFromFile[loopPtr] + " is an Invalid Move!!");
     			}
-     			
+    			
      			loopPtr = loopPtr + 1;
      			System.out.println("loopPtr --> " + loopPtr);
      			counter = counter - 1;
@@ -204,7 +205,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     		 } else {
     			 counter = boardFromToValues.length;
     			 loopPtr = 0;
-    			 JOptionPane.showMessageDialog(null, "End of Input moves");
+    			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");		 
     		 }
     	}//end of else
     }//end of method doSimulateMove

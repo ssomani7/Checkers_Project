@@ -11,14 +11,9 @@ import java.util.Map.Entry;
 
 public class ReadFromFile {
 	
-// Able to get String[] object withoutConstructor	
-//	ReadFromFile(){
-//		readInput(); /* Generates an ArrayList of String ('fromRow-fromCol:toRow-toCol')
-//		 			  * and passes it as an argument to method boardCoordinates. This method
-//		 			  * returns a String[] object. 
-//		 			  */		
-//	}//end of constructor
+	List<String> inputMovesFromFile = new ArrayList<String>(); //Holds orginal input from File
 	
+	//This Method generates a row-column pairs for all 64 boxes of Checkers board
 	public Map<String, Integer> matrix(){
 		Map<String, Integer> hmap1 = new LinkedHashMap<String, Integer>();
 		int count = 0;
@@ -45,10 +40,10 @@ public class ReadFromFile {
 		return hmap1;		
 	}//end of method matrix
 	
-	
+	//This Method returns a String[] of row & column values with respect to given input moves in the file
 	public String[] readInput() {
 		Map<String, Integer> hmap2 = matrix();
-		List<String> movesToBeSimulated = new ArrayList<String>();
+		List<String> movesToBeSimulated = new ArrayList<String>();	
 	    File file = new File("/Users/saurabhsomani/Desktop/checkersInput.txt");
 	    Scanner sc = null;
 	    
@@ -59,7 +54,8 @@ public class ReadFromFile {
 		}
 		
 		while(sc.hasNext()) { //prints line of inputFile.
-			String tempStr    = sc.next();			
+			String tempStr    = sc.next();
+			inputMovesFromFile.add(tempStr); //testing purposes
 			int leftValue     = getCoordinates(tempStr, 0);
 			int rightValue    = getCoordinates(tempStr, 1);			
 			String leftKey    = getKeyByValue(hmap2, leftValue);						
@@ -68,18 +64,19 @@ public class ReadFromFile {
 			movesToBeSimulated.add(tempFromTo);
 		}		
 		sc.close();
-		String[] boardFromToValues = boardCoordinates(movesToBeSimulated);
+		String[] boardFromToValues  = boardCoordinates(movesToBeSimulated);
 		return boardFromToValues;
-	}//end of method readInput
+	}//end of method readInput()
 	
 	
+	//This method converts a List<String> into String[]
 	public String[] boardCoordinates(List<String> movesToBeSimulated) {
 		String[] boardFromToValues = new String[movesToBeSimulated.size()];
 		boardFromToValues          = movesToBeSimulated.toArray(boardFromToValues);
 		return boardFromToValues;
-	}//end of method boardCoordinates
+	}//end of method boardCoordinates()
 	
-	
+	//This method separates out Row & Column Values from the given String
 	public void rowColSplitter(String[] boardFromToValues) {
 		int row, col;
 		String[] temp = boardFromToValues[0].split(":");
@@ -91,9 +88,9 @@ public class ReadFromFile {
 			col = getCoordinates(ptr, 1);
 			System.out.println("col = " + col);
 		}		
-	}//end of method rowColSplitter
+	}//end of method rowColSplitter()
 	
-	
+	//This Method returns row-column coordinates of original board with respect to input move from file. 
 	public String getKeyByValue(Map<String, Integer> hmap2, Integer value) {
         for (Entry<String, Integer> entry : hmap2.entrySet()) {
             if (value.equals(entry.getValue())) {
@@ -101,13 +98,14 @@ public class ReadFromFile {
             }
         }
         return null;
-	}//end of method getKeyByValue
+	}//end of method getKeyByValue()
 	
 	
+	//This Method returns the Integer value inside the given String
 	public int getCoordinates(String key, int position) {
 		String[] arrOfStr = key.split("-");	
 		return Integer.parseInt(arrOfStr[position]);
-	}//end of method getCoordinates
+	}//end of method getCoordinates()
 	
 	
 }// end of class ReadFromFile
