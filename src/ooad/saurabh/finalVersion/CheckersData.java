@@ -1,4 +1,4 @@
-package ooad.saurabh.trialVersion;
+package ooad.saurabh.finalVersion;
 
 import java.util.ArrayList;
 
@@ -80,7 +80,7 @@ public class CheckersData {
      */
     void makeMove(CheckersMove move) {
        makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
-    }//end of method makeMove with ChekcersMove object as an argument
+    }//end of method makeMove() with ChekcersMove object as an argument
     
     /**
      * Make the move from (fromRow,fromCol) to (toRow,toCol).  It is
@@ -104,7 +104,7 @@ public class CheckersData {
        if (toRow == 7 && board[toRow][toCol] == BLACK) {
           board[toRow][toCol] = BLACK_KING;
        }
-    }//end of method makeMove with 4 int arguments
+    }//end of method makeMove() with 4 int arguments
     
     /**
      * Return an array containing all the legal CheckersMoves
@@ -120,7 +120,7 @@ public class CheckersData {
           return null;
        }
        
-       int playerKing;  // The constant representing a King belonging to player.
+       int playerKing;  //The constant representing a King belonging to player.
        
        if (player == RED) {
           playerKing = RED_KING;
@@ -226,6 +226,7 @@ public class CheckersData {
             		 + " --> " + moveArray[i].toRow + "," + moveArray[i].toCol);
              System.out.println("--------------------------------------");
           }
+          System.out.println("*******************************************************");
           return moveArray;
        }       
     }//end of method getLegalMoves()
@@ -305,9 +306,6 @@ public class CheckersData {
           CheckersMove[] moveArray = new CheckersMove[moves.size()];
           for (int i = 0; i < moves.size(); i++) {
              moveArray[i] = moves.get(i);
-             System.out.println("Contents of getLegalJumps moveArray = " + moveArray[i].fromRow + "," + moveArray[i].fromCol
-            		 + " --> " + moveArray[i].toRow + "," + moveArray[i].toCol);
-             System.out.println("--------------------------------------");
           }
           return moveArray;
        }

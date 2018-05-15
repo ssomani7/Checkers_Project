@@ -1,12 +1,12 @@
-package ooad.saurabh.trialVersion;
+package ooad.saurabh.finalVersion;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+//import java.awt.event.MouseEvent;
+//import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,10 +21,10 @@ import javax.swing.JPanel;
  * the checkerboard.
  */
 
-public class Board extends JPanel implements ActionListener, MouseListener{
+public class Board extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private JButton resignButton;   // Button that a player can use to end 
+	private JButton endButton;   // Button that a player can use to end 
 									// the game by resigning.
 	private JButton newGameButton;  // Button for starting a new game.
 	private JButton nextButton;     // Button for simulating next move
@@ -39,11 +39,11 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 	}
 	
 	public JButton getResignButton() {
-		return resignButton;
+		return endButton;
 	}
 
-	public void setResignButton(JButton resignButton) {
-		this.resignButton = resignButton;
+	public void setResignButton(JButton endButton) {
+		this.endButton = endButton;
 	}
 
 	public JButton getNewGameButton() {
@@ -78,32 +78,31 @@ public class Board extends JPanel implements ActionListener, MouseListener{
 					              //  containing that piece.  If no piece is
 					              //  yet selected, then selectedRow is -1.
 	
-	CheckersMove[] legalMoves;  // An array containing the legal moves for the
-	                            // current player.	
+	CheckersMove[] legalMoves;  // An array containing the legal moves for the current player.	                            	
+	
+	ReadFromFile inputMoves; // String[] object containing Strings('fromRow-fromCol:toRow-toCol')
+	String[] boardFromToValues;
+	int counter = 0; 
+	int loopPtr = 0; 
+	String[] movesFromFile;
+	
 	/**
      * Constructor.  Create the buttons and lable.  Listens for mouse
       * clicks and for clicks on the buttons.  Create the board and
       * start the first game.
      */
-	
-	ReadFromFile inputMoves; // String[] object conatining Strings('fromRow-fromCol:toRow-toCol')
-	String[] boardFromToValues; //Added on May 13th
-	int counter = 0; //Added on May 13th
-	int loopPtr = 0; //Added on May 13th
-	String[] inputMovesFromFile;//Added on May 14th
-	
     Board() {
        setBackground(Color.BLACK);
-       addMouseListener(this);
+//       addMouseListener(this);
        
-       resignButton      = new JButton("Resign");
-       resignButton.addActionListener(this);
+       endButton      = new JButton("End");
+       endButton.addActionListener(this);
        
        newGameButton     = new JButton("New Game");
        newGameButton.addActionListener(this);
        
-       nextButton        = new JButton("Next"); //added by Saurabh
-       nextButton.addActionListener(this);  //added by Saurabh
+       nextButton        = new JButton("Next");
+       nextButton.addActionListener(this); 
        
        message           = new JLabel("",JLabel.CENTER);
        message.setFont(new  Font("Serif", Font.BOLD, 14));
@@ -111,11 +110,11 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        
        board             = new CheckersData();
        
-       inputMoves        = new ReadFromFile(); //added by Saurabh
-       boardFromToValues = inputMoves.readInput(); //added on may 13th
+       inputMoves        = new ReadFromFile();
+       boardFromToValues = inputMoves.readInput();
        counter           = boardFromToValues.length;
        
-       inputMovesFromFile = inputMoves.boardCoordinates(inputMoves.inputMovesFromFile); //testing purposes
+       movesFromFile = inputMoves.boardCoordinates(inputMoves.movesFromFile);
        
        doNewGame();
     }//end of constructor
@@ -133,10 +132,10 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        currentPlayer = CheckersData.RED;   // RED moves first.
        legalMoves    = board.getLegalMoves(CheckersData.RED);  // Get RED's legal moves.
        selectedRow   = -1;   // RED has not yet selected a piece to move.
-       message.setText("Red:  Make your move doNewGame.");
+       message.setText("Red:  Make your move.");
        gameInProgress = true;
        newGameButton.setEnabled(false);
-       resignButton.setEnabled(true);
+       endButton.setEnabled(true);
        repaint();
     }//end of method doNewGame
     
@@ -149,17 +148,15 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        if (src == newGameButton) {
           doNewGame();
        }
-       else if (src == resignButton) {
-          doResign();
+       else if (src == endButton) {
+          doEnd();
        }
-       else if (src == nextButton) { //else-if added by Saurabh
-    	  System.out.println("----------------------------------------------"); 
-    	  System.out.println("*********nextButton Clicked*************"); 
+       else if (src == nextButton) {
     	  doSimulateMove(); 
        }
     }//end of method actionPerformed()
    
-    //simulateMove added by Saurabh
+    //This Method simulates the move from the input File when 'Next' button is clicked. 
     public void doSimulateMove() {
     	if(gameInProgress == false) {
     		message.setText("Click \"New Game\" to start a new game.");
@@ -173,8 +170,9 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     			int fromCol = inputMoves.getCoordinates(tempBoardFromToValues[0], 1); 
     			int toRow   = inputMoves.getCoordinates(tempBoardFromToValues[1], 0); 
     			int toCol   = inputMoves.getCoordinates(tempBoardFromToValues[1], 1); 
-    			   		
-    			for (int i = 0; i < legalMoves.length; i++) { //testing purposes
+    			
+    			//Checking wether the given move is valid to be simulated
+    			for (int i = 0; i < legalMoves.length; i++) {
 		           if (legalMoves[i].fromRow == fromRow && legalMoves[i].fromCol == fromCol
 		                 && legalMoves[i].toRow == toRow && legalMoves[i].toCol == toCol) {
 		                 moveValidation = true;
@@ -183,53 +181,43 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     			  
     			if(moveValidation) { 
         			for(String ptr : tempBoardFromToValues) { 
-        				System.out.println("Splitter --> " + ptr);
-        				row = inputMoves.getCoordinates(ptr, 0);
-        				System.out.println("row = " + row);
-        				col = inputMoves.getCoordinates(ptr, 1);
-        				System.out.println("col = " + col);
-        				System.out.println("----------------------------------");
+        				row = inputMoves.getCoordinates(ptr, 0);        				
+        				col = inputMoves.getCoordinates(ptr, 1);        				       				
     		            if (col >= 0 && col < 8 && row >= 0 && row < 8) {
     		            	doClickSquare(row,col);
     		            }
         			}
     			} else { 
-    				JOptionPane.showMessageDialog(null, inputMovesFromFile[loopPtr] + " is an Invalid Move!!");
+    				JOptionPane.showMessageDialog(null, movesFromFile[loopPtr] + " is an Invalid Move!!");
     			}
     			
-     			loopPtr = loopPtr + 1;
-     			System.out.println("loopPtr --> " + loopPtr);
-     			counter = counter - 1;
-     			System.out.println("counter --> " + counter);
-     			System.out.println("----------------------------------");
+     			loopPtr = loopPtr + 1;     			
+     			counter = counter - 1;     			     			
     		 } else {
     			 counter = boardFromToValues.length;
     			 loopPtr = 0;
     			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");		 
     		 }
-    	}//end of else
-    }//end of method doSimulateMove
+    	}
+    }//end of method doSimulateMove()
       
-    /**
-     * Respond to a user click on the board.  If no game is in progress, show 
-     * an error message.  Otherwise, find the row and column that the user 
-     * clicked and call doClickSquare() to handle it.
-     */
-	@Override
-    public void mousePressed(MouseEvent evt) {
-       if (gameInProgress == false)
-          message.setText("Click \"New Game\" to start a new game.");
-       else {
-          int col = (evt.getX() - 2) / 20;
-          int row = (evt.getY() - 2) / 20;
-//          System.out.println("mousePressed method row = " + row); //testing purposes
-//          System.out.println("mousePressed method col = " + col); //testing purposes
-//          System.out.println("-------------------------------"); //testing purposes
-          if (col >= 0 && col < 8 && row >= 0 && row < 8) {
-             doClickSquare(row,col);
-          }
-       }
-    }// end of method mousePressed
+//    /**
+//     * Respond to a user click on the board.  If no game is in progress, show 
+//     * an error message.  Otherwise, find the row and column that the user 
+//     * clicked and call doClickSquare() to handle it.
+//     */
+//	@Override
+//    public void mousePressed(MouseEvent evt) {
+//       if (gameInProgress == false)
+//          message.setText("Click \"New Game\" to start a new game.");
+//       else {
+//          int col = (evt.getX() - 2) / 20;
+//          int row = (evt.getY() - 2) / 20;
+//          if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+//             doClickSquare(row,col);
+//          }
+//       }
+//    }//end of method mousePressed()
 	        
     /**
      * This is called by mousePressed() when a player clicks on the
@@ -246,9 +234,9 @@ public class Board extends JPanel implements ActionListener, MouseListener{
              selectedRow = row;
              selectedCol = col;
              if (currentPlayer == CheckersData.RED)
-                message.setText("RED:  Make your move doClickSquare RED Player.");
+                message.setText("RED:  Make your move.");
              else
-                message.setText("BLACK:  Make your move doClickSquare Black Player.");
+                message.setText("BLACK:  Make your move.");
              repaint();
              return;
           }
@@ -256,7 +244,6 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        /* If no piece has been selected to be moved, the user must first
         select a piece.  Show an error message and return. */     
        if (selectedRow < 0) {
-    	  System.out.println("*****selectedRow value is < 0*****");
           message.setText("Click the piece you want to move.");
           return;
        }     
@@ -272,7 +259,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
        /* If we get to this point, there is a piece selected, and the square where
         the user just clicked is not one where that piece can be legally moved.
         Show an error message. */       
-       message.setText("Click the square you want to move to.");     
+//       message.setText("Click the square you want to move to.");     
     }//end of method doClickSquare()
     
     /**
@@ -298,10 +285,6 @@ public class Board extends JPanel implements ActionListener, MouseListener{
              }
              selectedRow = move.toRow;  // Since only one piece can be moved, select it.
              selectedCol = move.toCol;
-             System.out.println("----------------------------------");
-             System.out.println("*****isJump() selectRow   = " + selectedRow);
-             System.out.println("*****isJump() selectedCol = " + selectedCol);
-             System.out.println("----------------------------------");
              repaint();
              return;
           }
@@ -316,10 +299,10 @@ public class Board extends JPanel implements ActionListener, MouseListener{
              gameOver("BLACK has no moves.  RED wins.");
           }
           else if (legalMoves[0].isJump()) {
-             message.setText("BLACK:  Make your move.  You must jump doMakeMove.");
+             message.setText("BLACK:  Make your move.  You must jump.");
           }
           else {
-             message.setText("BLACK:  Make your move doMakeMove.");
+             message.setText("BLACK:  Make your move.");
           }
        }
        else {
@@ -329,10 +312,10 @@ public class Board extends JPanel implements ActionListener, MouseListener{
              gameOver("RED has no moves.  BLACK wins.");
           }
           else if (legalMoves[0].isJump()) {
-             message.setText("RED:  Make your move.  You must jump doMakeMove.");
+             message.setText("RED:  Make your move.  You must jump.");
           }
           else {
-             message.setText("RED:  Make your move doMakeMove."); //added to print statement
+             message.setText("RED:  Make your move.");
           }
        }     
        /* Set selectedRow = -1 to record that the player has not yet selected
@@ -431,7 +414,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     /**
      * Current player resigns.  Game ends.  Opponent wins.
      */
-    void doResign() {
+    void doEnd() {
        if (gameInProgress == false) {
           message.setText("There is no game in progress!");
           return;
@@ -440,7 +423,7 @@ public class Board extends JPanel implements ActionListener, MouseListener{
           gameOver("RED resigns.  BLACK wins.");
        else
           gameOver("BLACK resigns.  RED wins.");
-    }//end of method doResign
+    }//end of method doEnd()
     
     /**
      * The game ends.  The parameter, str, is displayed as a message
@@ -451,25 +434,25 @@ public class Board extends JPanel implements ActionListener, MouseListener{
     void gameOver(String str) {
        message.setText(str);
        newGameButton.setEnabled(true);
-       resignButton.setEnabled(false);
+       endButton.setEnabled(false);
        gameInProgress = false;
-    }//end of method gameOver
+    }//end of method gameOver()
 
     
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
+//	@Override
+//	public void mouseClicked(MouseEvent e) {
+//	}
+//
+//	@Override
+//	public void mouseReleased(MouseEvent e) {
+//	}
+//
+//	@Override
+//	public void mouseEntered(MouseEvent e) {
+//	}
+//
+//	@Override
+//	public void mouseExited(MouseEvent e) {
+//	}
 	
-}
+}//end of class Board

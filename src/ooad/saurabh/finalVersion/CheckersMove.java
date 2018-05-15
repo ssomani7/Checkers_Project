@@ -1,4 +1,4 @@
-package ooad.saurabh.trialVersion;
+package ooad.saurabh.finalVersion;
 
 /**
  * A CheckersMove object represents a move in the game of Checkers.

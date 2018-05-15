@@ -1,4 +1,4 @@
-package ooad.saurabh.trialVersion;
+package ooad.saurabh.finalVersion;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 public class ReadFromFile {
 	
-	List<String> inputMovesFromFile = new ArrayList<String>(); //Holds orginal input from File
+	List<String> movesFromFile = new ArrayList<String>(); //Holds orginal input from File
 	
 	//This Method generates a row-column pairs for all 64 boxes of Checkers board
 	public Map<String, Integer> matrix(){
@@ -38,7 +38,7 @@ public class ReadFromFile {
 			}// inner for-loop for columns
 		}// outer for-loop for rows
 		return hmap1;		
-	}//end of method matrix
+	}//end of method matrix()
 	
 	//This Method returns a String[] of row & column values with respect to given input moves in the file
 	public String[] readInput() {
@@ -53,9 +53,9 @@ public class ReadFromFile {
 			e.printStackTrace();
 		}
 		
-		while(sc.hasNext()) { //prints line of inputFile.
+		while(sc.hasNext()) {
 			String tempStr    = sc.next();
-			inputMovesFromFile.add(tempStr); //testing purposes
+			movesFromFile.add(tempStr);
 			int leftValue     = getCoordinates(tempStr, 0);
 			int rightValue    = getCoordinates(tempStr, 1);			
 			String leftKey    = getKeyByValue(hmap2, leftValue);						
