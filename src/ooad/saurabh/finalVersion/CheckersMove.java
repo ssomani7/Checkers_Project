@@ -20,9 +20,9 @@ class CheckersMove {
    
    boolean isJump() {
       // Test whether this move is a jump.  It is assumed that
-      // the move is legal.  In a jump, the piece moves two
-      // rows.  (In a regular move, it only moves one row.)
+      // the move is legal. In a jump, the piece moves two
+      // rows. (In a regular move, it only moves one row.)
       return (fromRow - toRow == 2 || fromRow - toRow == -2); 	   
    }//end of method isJump
    
-}  // end class CheckersMove.
+}// end class CheckersMove.

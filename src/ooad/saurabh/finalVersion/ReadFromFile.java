@@ -11,10 +11,14 @@ import java.util.Map.Entry;
 
 public class ReadFromFile {
 	
-	List<String> movesFromFile = new ArrayList<String>(); //Holds orginal input from File
+	private List<String> movesFromFile = new ArrayList<String>(); //Holds orginal input from File
 	
+	protected List<String> getMovesFromFile() {
+		return movesFromFile;
+	}
+
 	//This Method generates a row-column pairs for all 64 boxes of Checkers board
-	public Map<String, Integer> matrix(){
+	private Map<String, Integer> matrix(){
 		Map<String, Integer> hmap1 = new LinkedHashMap<String, Integer>();
 		int count = 0;
 		for(int row = 0; row < 8; row++) {
@@ -41,7 +45,7 @@ public class ReadFromFile {
 	}//end of method matrix()
 	
 	//This Method returns a String[] of row & column values with respect to given input moves in the file
-	public String[] readInput() {
+	protected String[] readInput() {
 		Map<String, Integer> hmap2 = matrix();
 		List<String> movesToBeSimulated = new ArrayList<String>();	
 	    File file = new File("/Users/saurabhsomani/Desktop/checkersInput.txt");
@@ -70,14 +74,14 @@ public class ReadFromFile {
 	
 	
 	//This method converts a List<String> into String[]
-	public String[] boardCoordinates(List<String> movesToBeSimulated) {
+	protected String[] boardCoordinates(List<String> movesToBeSimulated) {
 		String[] boardFromToValues = new String[movesToBeSimulated.size()];
 		boardFromToValues          = movesToBeSimulated.toArray(boardFromToValues);
 		return boardFromToValues;
 	}//end of method boardCoordinates()
 	
 	//This method separates out Row & Column Values from the given String
-	public void rowColSplitter(String[] boardFromToValues) {
+	protected void rowColSplitter(String[] boardFromToValues) {
 		int row, col;
 		String[] temp = boardFromToValues[0].split(":");
 		
@@ -91,7 +95,7 @@ public class ReadFromFile {
 	}//end of method rowColSplitter()
 	
 	//This Method returns row-column coordinates of original board with respect to input move from file. 
-	public String getKeyByValue(Map<String, Integer> hmap2, Integer value) {
+	private String getKeyByValue(Map<String, Integer> hmap2, Integer value) {
         for (Entry<String, Integer> entry : hmap2.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
@@ -102,7 +106,7 @@ public class ReadFromFile {
 	
 	
 	//This Method returns the Integer value inside the given String
-	public int getCoordinates(String key, int position) {
+	protected int getCoordinates(String key, int position) {
 		String[] arrOfStr = key.split("-");	
 		return Integer.parseInt(arrOfStr[position]);
 	}//end of method getCoordinates()

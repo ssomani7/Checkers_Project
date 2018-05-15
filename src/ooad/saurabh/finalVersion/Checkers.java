@@ -36,9 +36,9 @@ public class Checkers extends JPanel{
 		      setBackground(new Color(0,150,0));  // Dark green background.
 		      
 		      /* Create the components and add them to the applet. */	      
-		      Board board = new Board();  // Note: The constructor for the
-		                                  //   board also creates the buttons
-		                                  //   and label.
+		      Board board = new Board();  // The constructor for the
+		                                  // board also creates the buttons
+		                                  // and label.
 		      add(board);
 		      add(board.getNewGameButton());
 		      add(board.getResignButton());
@@ -47,7 +47,7 @@ public class Checkers extends JPanel{
 		      
 		      /* Set the position and size of each component by calling
 		       its setBounds() method. */		      
-		      board.setBounds(20,20,164,164); // Note:  size MUST be 164-by-164 !
+		      board.setBounds(20,20,164,164); // Note:size MUST be 164-by-164 !
 		      board.getNewGameButton().setBounds(210, 30, 120, 30);
 		      board.getResignButton().setBounds(210, 70, 120, 30);
 		      board.getNextButton().setBounds(210, 120, 120, 30);

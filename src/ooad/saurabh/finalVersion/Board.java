@@ -5,9 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-//import java.awt.event.MouseEvent;
-//import java.awt.event.MouseListener;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,42 +21,25 @@ import javax.swing.JPanel;
 public class Board extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private JButton endButton;   // Button that a player can use to end 
-									// the game by resigning.
-	private JButton newGameButton;  // Button for starting a new game.
-	private JButton nextButton;     // Button for simulating next move
-	private JLabel  message;        // Label for displaying messages to the user.
+	private JButton endButton;     // Button that a player can use to end the game by resigning.
+	private JButton newGameButton; // Button for starting a new game.
+	private JButton nextButton;    // Button for simulating next move
+	private JLabel  message;       // Label for displaying messages to the user.
 	
-	public JButton getNextButton() {
+	protected JButton getNextButton() {
 		return nextButton;
 	}
 
-	public void setNextButton(JButton nextButton) {
-		this.nextButton = nextButton;
-	}
-	
-	public JButton getResignButton() {
+	protected JButton getResignButton() {
 		return endButton;
 	}
 
-	public void setResignButton(JButton endButton) {
-		this.endButton = endButton;
-	}
-
-	public JButton getNewGameButton() {
+	protected JButton getNewGameButton() {
 		return newGameButton;
 	}
 
-	public void setNewGameButton(JButton newGameButton) {
-		this.newGameButton = newGameButton;
-	}
-
-	public JLabel getMessage() {
+	protected JLabel getMessage() {
 		return message;
-	}
-
-	public void setMessage(JLabel message) {
-		this.message = message;
 	}
 	   
     CheckersData board;   // The data for the checkers board is kept here.
@@ -68,10 +48,9 @@ public class Board extends JPanel implements ActionListener{
 
 	boolean gameInProgress; // Is a game currently in progress?
 	
-	/* The next three variables are valid only when the game is in progress. */
-	
+	/* The next three int variables are valid only when the game is in progress. */	
 	int currentPlayer;      // Whose turn is it now?  The possible values
-	                       //    are CheckersData.RED and CheckersData.BLACK.
+	                       //  are CheckersData.RED and CheckersData.BLACK.
 	
 	int selectedRow, selectedCol;  // If the current player has selected a piece to
 					               //  move, these give the row and column
@@ -80,12 +59,12 @@ public class Board extends JPanel implements ActionListener{
 	
 	CheckersMove[] legalMoves;  // An array containing the legal moves for the current player.	                            	
 	
-	ReadFromFile inputMoves; // String[] object containing Strings('fromRow-fromCol:toRow-toCol')
-	String[] boardFromToValues;
-	int counter = 0; 
-	int loopPtr = 0; 
-	String[] movesFromFile;
-	
+	ReadFromFile inputMoves; //Object of class ReadFromFile
+	String[] boardFromToValues; // An array containing Strings('fromRow-fromCol:toRow-toCol')
+	String[] movesFromFile; // An array containing the original inputMoves from given file.
+	int counter = 0; // Used as pointer to loop over array boardFromToValues.
+	int loopPtr = 0; // Used as pointer to acces strings inside a string array.
+		
 	/**
      * Constructor.  Create the buttons and lable.  Listens for mouse
       * clicks and for clicks on the buttons.  Create the board and
@@ -93,28 +72,27 @@ public class Board extends JPanel implements ActionListener{
      */
     Board() {
        setBackground(Color.BLACK);
-//       addMouseListener(this);
        
-       endButton      = new JButton("End");
+       endButton = new JButton("End");
        endButton.addActionListener(this);
        
-       newGameButton     = new JButton("New Game");
+       newGameButton = new JButton("New Game");
        newGameButton.addActionListener(this);
        
-       nextButton        = new JButton("Next");
+       nextButton = new JButton("Next");
        nextButton.addActionListener(this); 
        
-       message           = new JLabel("",JLabel.CENTER);
+       message = new JLabel("",JLabel.CENTER);
        message.setFont(new  Font("Serif", Font.BOLD, 14));
        message.setForeground(Color.green);
        
-       board             = new CheckersData();
+       board = new CheckersData();
        
        inputMoves        = new ReadFromFile();
        boardFromToValues = inputMoves.readInput();
        counter           = boardFromToValues.length;
        
-       movesFromFile = inputMoves.boardCoordinates(inputMoves.movesFromFile);
+       movesFromFile = inputMoves.boardCoordinates(inputMoves.getMovesFromFile());
        
        doNewGame();
     }//end of constructor
@@ -124,7 +102,8 @@ public class Board extends JPanel implements ActionListener{
      */
     void doNewGame() {
        if (gameInProgress == true) {
-             // This should not be possible, but it doens't hurt to check.
+         // Extra Check for boolean gameInProgess. Ideally if loop should never get executed.
+    	 // If it does get executed then there is some problem with launching the game.  
           message.setText("Finish the current game first!");
           return;
        }
@@ -171,7 +150,7 @@ public class Board extends JPanel implements ActionListener{
     			int toRow   = inputMoves.getCoordinates(tempBoardFromToValues[1], 0); 
     			int toCol   = inputMoves.getCoordinates(tempBoardFromToValues[1], 1); 
     			
-    			//Checking wether the given move is valid to be simulated
+    			//Checking wether the given move is valid in order to be simulated.
     			for (int i = 0; i < legalMoves.length; i++) {
 		           if (legalMoves[i].fromRow == fromRow && legalMoves[i].fromCol == fromCol
 		                 && legalMoves[i].toRow == toRow && legalMoves[i].toCol == toCol) {
@@ -196,39 +175,22 @@ public class Board extends JPanel implements ActionListener{
     		 } else {
     			 counter = boardFromToValues.length;
     			 loopPtr = 0;
-    			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");		 
+    			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");
+    			 //add code for ending program execution here.
     		 }
     	}
     }//end of method doSimulateMove()
-      
-//    /**
-//     * Respond to a user click on the board.  If no game is in progress, show 
-//     * an error message.  Otherwise, find the row and column that the user 
-//     * clicked and call doClickSquare() to handle it.
-//     */
-//	@Override
-//    public void mousePressed(MouseEvent evt) {
-//       if (gameInProgress == false)
-//          message.setText("Click \"New Game\" to start a new game.");
-//       else {
-//          int col = (evt.getX() - 2) / 20;
-//          int row = (evt.getY() - 2) / 20;
-//          if (col >= 0 && col < 8 && row >= 0 && row < 8) {
-//             doClickSquare(row,col);
-//          }
-//       }
-//    }//end of method mousePressed()
-	        
+ 	        
     /**
-     * This is called by mousePressed() when a player clicks on the
-     * square in the specified row and col.  It has already been checked
-     * that a game is, in fact, in progress.
+     * This is called by doSimulateMove() when a player clicks on the
+     * next button.
      */
     void doClickSquare(int row, int col) {     
-       /* If the player clicked on one of the pieces that the player
-        can move, mark this row and column as selected and return.  (This
-        might change a previous selection.)  Reset the message, in
-        case it was previously displaying an error message. */      
+       /*
+        * When called the first time, the below for-loop sets row and column
+        * to selectedRow and selectedCol which will be assigned to fromRow and
+        * fromCol values.   
+        */
        for (int i = 0; i < legalMoves.length; i++) {
           if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
              selectedRow = row;
@@ -246,20 +208,19 @@ public class Board extends JPanel implements ActionListener{
        if (selectedRow < 0) {
           message.setText("Click the piece you want to move.");
           return;
-       }     
-       /* If the user clicked on a squre where the selected piece can be
-        legally moved, then make the move and return. */     
+       }
+       
+       /*
+        * Calling doMakeMove method which will make the specified move, by passing it the 
+        * valid fromRow,fromCol and toRow,toCol.  
+        */
        for (int i = 0; i < legalMoves.length; i++) {
           if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol
                 && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
              doMakeMove(legalMoves[i]);
              return;
           }
-       }
-       /* If we get to this point, there is a piece selected, and the square where
-        the user just clicked is not one where that piece can be legally moved.
-        Show an error message. */       
-//       message.setText("Click the square you want to move to.");     
+       }    
     }//end of method doClickSquare()
     
     /**
@@ -321,9 +282,8 @@ public class Board extends JPanel implements ActionListener{
        /* Set selectedRow = -1 to record that the player has not yet selected
         a piece to move. */      
        selectedRow = -1;     
-       /* As a courtesy to the user, if all legal moves use the same piece, then
-        select that piece automatically so the user won't have to click on it
-        to select it. */       
+       
+       /* If all legal moves use the same piece, then select that piece automatically.*/
        if (legalMoves != null) {
           boolean sameStartSquare = true;
           for (int i = 1; i < legalMoves.length; i++) {
@@ -384,7 +344,7 @@ public class Board extends JPanel implements ActionListener{
              }
           }
        }       
-       /* If a game is in progress, hilite the legal moves.   Note that legalMoves
+       /* If a game is in progress, hilight the legal moves. Note that legalMoves
         is never null while a game is in progress. */          
        if (gameInProgress) {
              /* First, draw a 2-pixel cyan border around the pieces that can be moved. */
@@ -427,7 +387,7 @@ public class Board extends JPanel implements ActionListener{
     
     /**
      * The game ends.  The parameter, str, is displayed as a message
-     * to the user.  The states of the buttons are adjusted so playes
+     * to the user.  The states of the buttons are adjusted so players
      * can start a new game.  This method is called when the game
      * ends at any point in this class.
      */
@@ -438,21 +398,4 @@ public class Board extends JPanel implements ActionListener{
        gameInProgress = false;
     }//end of method gameOver()
 
-    
-//	@Override
-//	public void mouseClicked(MouseEvent e) {
-//	}
-//
-//	@Override
-//	public void mouseReleased(MouseEvent e) {
-//	}
-//
-//	@Override
-//	public void mouseEntered(MouseEvent e) {
-//	}
-//
-//	@Override
-//	public void mouseExited(MouseEvent e) {
-//	}
-	
 }//end of class Board

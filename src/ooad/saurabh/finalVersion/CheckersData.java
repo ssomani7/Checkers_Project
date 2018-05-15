@@ -20,7 +20,7 @@ public class CheckersData {
     BLACK      = 3,
     BLACK_KING = 4;
 
-	int[][] board;  // board[r][c] is the contents of row r, column c.  
+	int[][] board;  //board[r][c] is the contents of row r, column c.  
 		
 	/**
 	* Constructor.  Create the board and set it up for a new game.
@@ -118,17 +118,14 @@ public class CheckersData {
     CheckersMove[] getLegalMoves(int player) {     
        if (player != RED && player != BLACK) {
           return null;
-       }
-       
+       }     
        int playerKing;  //The constant representing a King belonging to player.
-       
        if (player == RED) {
           playerKing = RED_KING;
        }
        else {
           playerKing = BLACK_KING;
        }
-       
        ArrayList<CheckersMove> moves = new ArrayList<CheckersMove>();  // Moves will be stored in this list.     
        /*  First, check for any possible jumps.  Look at each square on the board.
         If that square contains one of the player's pieces, look at a possible
@@ -240,17 +237,14 @@ public class CheckersData {
     CheckersMove[] getLegalJumpsFrom(int player, int row, int col) {
        if (player != RED && player != BLACK) {
           return null;
-       }
-       
+       }   
        int playerKing;  // The constant representing a King belonging to player.
-       
        if (player == RED) {
           playerKing = RED_KING;
        }
        else {
           playerKing = BLACK_KING;
        }
-       
        ArrayList<CheckersMove> moves = new ArrayList<CheckersMove>();  // The legal jumps will be stored in this list.
        
        if (board[row][col] == player || board[row][col] == playerKing) {
@@ -320,30 +314,30 @@ public class CheckersData {
      */
     private boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3) {      
        if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) {
-          return false;  // (r3,c3) is off the board.
+          return false;  //(r3,c3) is off the board.
        }
        
        if (board[r3][c3] != EMPTY) {
-          return false;  // (r3,c3) already contains a piece.
+          return false;  //(r3,c3) already contains a piece.
        }
        
        if (player == RED) {
           if (board[r1][c1] == RED && r3 > r1) {
-             return false;  // Regular red piece can only move  up.
+             return false;  //Regular red piece can only move  up.
           }
           if (board[r2][c2] != BLACK && board[r2][c2] != BLACK_KING) {
-             return false;  // There is no black piece to jump.
+             return false;  //There is no black piece to jump.
           }
-          return true;  // The jump is legal.
+          return true;  //The jump is legal.
        }
        else {
           if (board[r1][c1] == BLACK && r3 < r1) {
-             return false;  // Regular black piece can only move downn.
+             return false;  //Regular black piece can only move downn.
           }
           if (board[r2][c2] != RED && board[r2][c2] != RED_KING) {
-             return false;  // There is no red piece to jump.
+             return false;  //There is no red piece to jump.
           }
-          return true;  // The jump is legal.
+          return true;  //The jump is legal.
        }
        
     }//end of method canJump()
@@ -354,28 +348,26 @@ public class CheckersData {
      * assumed that (r1,r2) contains one of the player's pieces and
      * that (r2,c2) is a neighboring square.
      */
-    private boolean canMove(int player, int r1, int c1, int r2, int c2) {
-       
+    private boolean canMove(int player, int r1, int c1, int r2, int c2) {      
        if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8) {
-          return false;  // (r2,c2) is off the board.
+          return false;  //(r2,c2) is off the board.
        }
        
        if (board[r2][c2] != EMPTY) {
-          return false;  // (r2,c2) already contains a piece.
+          return false;  //(r2,c2) already contains a piece.
        }
        
        if (player == RED) {
           if (board[r1][c1] == RED && r2 > r1) {
-             return false;  // Regualr red piece can only move down.
+             return false;  //Regualr red piece can only move down.
           }
-          return true;  // The move is legal.
+          return true;  //The move is legal.
        }
        else {
           if (board[r1][c1] == BLACK && r2 < r1) {
-             return false;  // Regular black piece can only move up.
+             return false;  //Regular black piece can only move up.
           }
-          return true;  // The move is legal.
-       }
-       
+          return true;  //The move is legal.
+       }     
     }//end of method canMove()
 }//end of class CheckersData
