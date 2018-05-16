@@ -7,18 +7,34 @@ package ooad.saurabh.finalVersion;
  * (This class makes no guarantee that the move is legal.)   
  */
 class CheckersMove {
-   int fromRow, fromCol;  // Position of piece to be moved.
-   int toRow, toCol;      // Square it is to move to.
+   private int fromRow, fromCol;  // Position of piece to be moved.
+   private int toRow, toCol;      // Square it is to move to.
    
-   CheckersMove(int r1, int c1, int r2, int c2) {
-   // Just set the values of the instance variables.
-      fromRow = r1;
-      fromCol = c1;
-      toRow   = r2;
-      toCol   = c2;
-   }//end of constructor
+   public int getFromRow() {
+	   return fromRow;
+   }
+	
+	public int getFromCol() {
+		return fromCol;
+	}
+		
+	public int getToRow() {
+		return toRow;
+	}
+		
+	public int getToCol() {
+		return toCol;
+	}
+	
+	protected CheckersMove(int fromRow, int fromCol, int toRow, int toCol) {
+	// Just set the values of the instance variables.
+      this.fromRow = fromRow;
+      this.fromCol = fromCol;
+      this.toRow   = toRow;
+      this.toCol   = toCol;
+    }//end of constructor
    
-   boolean isJump() {
+   protected boolean isJump() {
       // Test whether this move is a jump.  It is assumed that
       // the move is legal. In a jump, the piece moves two
       // rows. (In a regular move, it only moves one row.)

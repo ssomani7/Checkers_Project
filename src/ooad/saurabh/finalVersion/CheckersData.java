@@ -20,7 +20,7 @@ public class CheckersData {
     BLACK      = 3,
     BLACK_KING = 4;
 
-	int[][] board;  //board[r][c] is the contents of row r, column c.  
+	private int[][] board;  //board[r][c] is the contents of row r, column c.  
 		
 	/**
 	* Constructor.  Create the board and set it up for a new game.
@@ -37,7 +37,7 @@ public class CheckersData {
      * all such squares in the first three rows contain black squares
      * and all such squares in the last three rows contain red squares.
      */
-    void setUpGame() {
+    protected void setUpGame() {
         for (int row = 0; row < 8; row++) {
            for (int col = 0; col < 8; col++) {
               if ( row % 2 == col % 2 ) {
@@ -61,7 +61,7 @@ public class CheckersData {
     /**
      * Return the contents of the square in the specified row and column.
      */
-    int pieceAt(int row, int col) {
+    protected int pieceAt(int row, int col) {
        return board[row][col];
     }//end of method pieceAt
     
@@ -70,7 +70,7 @@ public class CheckersData {
      * piece must be one of the constants EMPTY, RED, BLACK, RED_KING,
      * BLACK_KING.
      */
-    void setPieceAt(int row, int col, int piece) {
+    protected void setPieceAt(int row, int col, int piece) {
        board[row][col] = piece;
     }//end of method setPieceAt
     
@@ -78,8 +78,8 @@ public class CheckersData {
      * Make the specified move.  It is assumed that move
      * is non-null and that the move it represents is legal.
      */
-    void makeMove(CheckersMove move) {
-       makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+    protected void makeMove(CheckersMove move) {
+       makeMove(move.getFromRow(), move.getFromCol(), move.getToRow(), move.getToCol()); //testing purposes
     }//end of method makeMove() with ChekcersMove object as an argument
     
     /**
@@ -89,7 +89,7 @@ public class CheckersData {
      * the last row on the opponent's side of the board, the 
      * piece becomes a king.
      */
-    void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+    protected void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
        board[toRow][toCol] = board[fromRow][fromCol];
        board[fromRow][fromCol] = EMPTY;
        if (fromRow - toRow == 2 || fromRow - toRow == -2) {
@@ -115,7 +115,7 @@ public class CheckersData {
      * entirely of jump moves or entirely of regular moves, since
      * if the player can jump, only jumps are legal moves.
      */
-    CheckersMove[] getLegalMoves(int player) {     
+     protected CheckersMove[] getLegalMoves(int player) {     
        if (player != RED && player != BLACK) {
           return null;
        }     
@@ -219,8 +219,8 @@ public class CheckersData {
           CheckersMove[] moveArray = new CheckersMove[moves.size()];
           for (int i = 0; i < moves.size(); i++) {
              moveArray[i] = moves.get(i);
-             System.out.println("Contents of getLegalMove moveArray = " + moveArray[i].fromRow + "," + moveArray[i].fromCol
-            		 + " --> " + moveArray[i].toRow + "," + moveArray[i].toCol);
+             System.out.println("Contents of getLegalMove moveArray = " + moveArray[i].getFromRow() + "," 
+            		 + moveArray[i].getFromCol()+ " --> " + moveArray[i].getToRow() + "," + moveArray[i].getToCol());
              System.out.println("--------------------------------------");
           }
           System.out.println("*******************************************************");
@@ -234,7 +234,7 @@ public class CheckersData {
      * jumps are possible, null is returned.  The logic is similar
      * to the logic of the getLegalMoves() method.
      */
-    CheckersMove[] getLegalJumpsFrom(int player, int row, int col) {
+    protected CheckersMove[] getLegalJumpsFrom(int player, int row, int col) {
        if (player != RED && player != BLACK) {
           return null;
        }   

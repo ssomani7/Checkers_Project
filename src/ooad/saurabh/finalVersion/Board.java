@@ -42,35 +42,35 @@ public class Board extends JPanel implements ActionListener{
 		return message;
 	}
 	   
-    CheckersData board;   // The data for the checkers board is kept here.
+    private CheckersData board;   // The data for the checkers board is kept here.
 					     //  This board is also responsible for generating
 					    //   lists of legal moves.
 
-	boolean gameInProgress; // Is a game currently in progress?
+	private boolean gameInProgress; // Is a game currently in progress?
 	
 	/* The next three int variables are valid only when the game is in progress. */	
-	int currentPlayer;      // Whose turn is it now?  The possible values
+	private int currentPlayer;      // Whose turn is it now?  The possible values
 	                       //  are CheckersData.RED and CheckersData.BLACK.
 	
-	int selectedRow, selectedCol;  // If the current player has selected a piece to
+	private int selectedRow, selectedCol;  // If the current player has selected a piece to
 					               //  move, these give the row and column
 					              //  containing that piece.  If no piece is
 					              //  yet selected, then selectedRow is -1.
 	
-	CheckersMove[] legalMoves;  // An array containing the legal moves for the current player.	                            	
+	private CheckersMove[] legalMoves;  // An array containing the legal moves for the current player.	                            	
 	
-	ReadFromFile inputMoves; //Object of class ReadFromFile
-	String[] boardFromToValues; // An array containing Strings('fromRow-fromCol:toRow-toCol')
-	String[] movesFromFile; // An array containing the original inputMoves from given file.
-	int counter = 0; // Used as pointer to loop over array boardFromToValues.
-	int loopPtr = 0; // Used as pointer to acces strings inside a string array.
+	private ReadFromFile inputMoves; //Object of class ReadFromFile
+	private String[] boardFromToValues; // An array containing Strings('fromRow-fromCol:toRow-toCol')
+	private String[] movesFromFile; // An array containing the original inputMoves from given file.
+	private int counter = 0; // Used as pointer to loop over array boardFromToValues.
+	private int loopPtr = 0; // Used as pointer to acces strings inside a string array.
 		
 	/**
      * Constructor.  Create the buttons and lable.  Listens for mouse
       * clicks and for clicks on the buttons.  Create the board and
       * start the first game.
      */
-    Board() {
+    protected Board() {
        setBackground(Color.BLACK);
        
        endButton = new JButton("End");
@@ -92,18 +92,17 @@ public class Board extends JPanel implements ActionListener{
        boardFromToValues = inputMoves.readInput();
        counter           = boardFromToValues.length;
        
-       movesFromFile = inputMoves.boardCoordinates(inputMoves.getMovesFromFile());
-       
+       movesFromFile = inputMoves.boardCoordinates(inputMoves.getMovesFromFile());     
        doNewGame();
     }//end of constructor
         
     /**
      * Start a new game
      */
-    void doNewGame() {
+    private void doNewGame() {
        if (gameInProgress == true) {
-         // Extra Check for boolean gameInProgess. Ideally if loop should never get executed.
-    	 // If it does get executed then there is some problem with launching the game.  
+         // Extra Check for boolean gameInProgess. Ideally this loop should never get executed.
+    	 // If it does get executed, then there is some problem with launching the game.  
           message.setText("Finish the current game first!");
           return;
        }
@@ -136,7 +135,7 @@ public class Board extends JPanel implements ActionListener{
     }//end of method actionPerformed()
    
     //This Method simulates the move from the input File when 'Next' button is clicked. 
-    public void doSimulateMove() {
+    private void doSimulateMove() {
     	if(gameInProgress == false) {
     		message.setText("Click \"New Game\" to start a new game.");
     		return;
@@ -152,8 +151,8 @@ public class Board extends JPanel implements ActionListener{
     			
     			//Checking wether the given move is valid in order to be simulated.
     			for (int i = 0; i < legalMoves.length; i++) {
-		           if (legalMoves[i].fromRow == fromRow && legalMoves[i].fromCol == fromCol
-		                 && legalMoves[i].toRow == toRow && legalMoves[i].toCol == toCol) {
+		           if (legalMoves[i].getFromRow() == fromRow && legalMoves[i].getFromCol() == fromCol
+		                 && legalMoves[i].getToRow() == toRow && legalMoves[i].getToCol() == toCol) {
 		                 moveValidation = true;
 		           } 
 		        }
@@ -185,14 +184,14 @@ public class Board extends JPanel implements ActionListener{
      * This is called by doSimulateMove() when a player clicks on the
      * next button.
      */
-    void doClickSquare(int row, int col) {     
+   private void doClickSquare(int row, int col) {     
        /*
         * When called the first time, the below for-loop sets row and column
         * to selectedRow and selectedCol which will be assigned to fromRow and
         * fromCol values.   
         */
        for (int i = 0; i < legalMoves.length; i++) {
-          if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
+          if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) {
              selectedRow = row;
              selectedCol = col;
              if (currentPlayer == CheckersData.RED)
@@ -214,9 +213,9 @@ public class Board extends JPanel implements ActionListener{
         * Calling doMakeMove method which will make the specified move, by passing it the 
         * valid fromRow,fromCol and toRow,toCol.  
         */
-       for (int i = 0; i < legalMoves.length; i++) {
-          if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol
-                && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
+       for (int i = 0; i < legalMoves.length; i++) { //testing purposes
+          if (legalMoves[i].getFromRow() == selectedRow && legalMoves[i].getFromCol() == selectedCol
+                && legalMoves[i].getToRow() == row && legalMoves[i].getToCol() == col) {
              doMakeMove(legalMoves[i]);
              return;
           }
@@ -228,7 +227,7 @@ public class Board extends JPanel implements ActionListener{
      * move.  Make the move, and then either end or continue the game
      * appropriately.
      */
-    void doMakeMove(CheckersMove move) {     
+    private void doMakeMove(CheckersMove move) {     
        board.makeMove(move);      
        /* If the move was a jump, it's possible that the player has another
         jump.  Check for legal jumps starting from the square that the player
@@ -236,7 +235,7 @@ public class Board extends JPanel implements ActionListener{
         player continues moving.
         */       
        if (move.isJump()) {
-          legalMoves = board.getLegalJumpsFrom(currentPlayer,move.toRow,move.toCol);
+          legalMoves = board.getLegalJumpsFrom(currentPlayer,move.getToRow(),move.getToCol());
           if (legalMoves != null) {
              if (currentPlayer == CheckersData.RED) {
                 message.setText("RED:  You must continue jumping.");
@@ -244,8 +243,9 @@ public class Board extends JPanel implements ActionListener{
              else {
                 message.setText("BLACK:  You must continue jumping.");
              }
-             selectedRow = move.toRow;  // Since only one piece can be moved, select it.
-             selectedCol = move.toCol;
+             //testing purposes
+             selectedRow = move.getToRow();  // Since only one piece can be moved, select it.
+             selectedCol = move.getToCol();
              repaint();
              return;
           }
@@ -287,15 +287,15 @@ public class Board extends JPanel implements ActionListener{
        if (legalMoves != null) {
           boolean sameStartSquare = true;
           for (int i = 1; i < legalMoves.length; i++) {
-             if (legalMoves[i].fromRow != legalMoves[0].fromRow
-                   || legalMoves[i].fromCol != legalMoves[0].fromCol) {
+             if (legalMoves[i].getFromRow() != legalMoves[0].getFromRow()
+                   || legalMoves[i].getFromCol() != legalMoves[0].getFromCol()) {
                 sameStartSquare = false;
                 break;
              }
           }
           if (sameStartSquare) {
-             selectedRow = legalMoves[0].fromRow;
-             selectedCol = legalMoves[0].fromCol;
+             selectedRow = legalMoves[0].getFromRow();
+             selectedCol = legalMoves[0].getFromCol();
           }
        }      
        /* Make sure the board is redrawn in its new state. */      
@@ -306,6 +306,7 @@ public class Board extends JPanel implements ActionListener{
      * Draw  checkerboard pattern in gray and lightGray.  Draw the
      * checkers.  If a game is in progress, hilight the legal moves.
      */
+    //This method has to be public since we cannot reduce the visibility of an inherited method of JComponent 
     public void paintComponent(Graphics g) {      
        /* Draw a two-pixel black border around the edges of the canvas. */      
        g.setColor(Color.black);
@@ -350,8 +351,8 @@ public class Board extends JPanel implements ActionListener{
              /* First, draw a 2-pixel cyan border around the pieces that can be moved. */
           g.setColor(Color.cyan);
           for (int i = 0; i < legalMoves.length; i++) {
-             g.drawRect(2 + legalMoves[i].fromCol*20, 2 + legalMoves[i].fromRow*20, 19, 19);
-             g.drawRect(3 + legalMoves[i].fromCol*20, 3 + legalMoves[i].fromRow*20, 17, 17);
+             g.drawRect(2 + legalMoves[i].getFromCol()*20, 2 + legalMoves[i].getFromRow()*20, 19, 19);
+             g.drawRect(3 + legalMoves[i].getFromCol()*20, 3 + legalMoves[i].getFromRow()*20, 17, 17);
           }
              /* If a piece is selected for moving (i.e. if selectedRow >= 0), then
               draw a 2-pixel white border around that piece and draw green borders 
@@ -362,9 +363,9 @@ public class Board extends JPanel implements ActionListener{
              g.drawRect(3 + selectedCol*20, 3 + selectedRow*20, 17, 17);
              g.setColor(Color.green);
              for (int i = 0; i < legalMoves.length; i++) {
-                if (legalMoves[i].fromCol == selectedCol && legalMoves[i].fromRow == selectedRow) {
-                   g.drawRect(2 + legalMoves[i].toCol*20, 2 + legalMoves[i].toRow*20, 19, 19);
-                   g.drawRect(3 + legalMoves[i].toCol*20, 3 + legalMoves[i].toRow*20, 17, 17);
+                if (legalMoves[i].getFromCol() == selectedCol && legalMoves[i].getFromRow() == selectedRow) {
+                   g.drawRect(2 + legalMoves[i].getToCol()*20, 2 + legalMoves[i].getToRow()*20, 19, 19);
+                   g.drawRect(3 + legalMoves[i].getToCol()*20, 3 + legalMoves[i].getToRow()*20, 17, 17);
                 }
              }
           }
@@ -374,7 +375,7 @@ public class Board extends JPanel implements ActionListener{
     /**
      * Current player resigns.  Game ends.  Opponent wins.
      */
-    void doEnd() {
+    private void doEnd() {
        if (gameInProgress == false) {
           message.setText("There is no game in progress!");
           return;
@@ -391,7 +392,7 @@ public class Board extends JPanel implements ActionListener{
      * can start a new game.  This method is called when the game
      * ends at any point in this class.
      */
-    void gameOver(String str) {
+    private void gameOver(String str) {
        message.setText(str);
        newGameButton.setEnabled(true);
        endButton.setEnabled(false);

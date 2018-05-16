@@ -80,19 +80,6 @@ public class ReadFromFile {
 		return boardFromToValues;
 	}//end of method boardCoordinates()
 	
-	//This method separates out Row & Column Values from the given String
-	protected void rowColSplitter(String[] boardFromToValues) {
-		int row, col;
-		String[] temp = boardFromToValues[0].split(":");
-		
-		for(String ptr:temp) {
-			System.out.println("Splitter --> " + ptr);
-			row = getCoordinates(ptr, 0);
-			System.out.println("row = " + row);
-			col = getCoordinates(ptr, 1);
-			System.out.println("col = " + col);
-		}		
-	}//end of method rowColSplitter()
 	
 	//This Method returns row-column coordinates of original board with respect to input move from file. 
 	private String getKeyByValue(Map<String, Integer> hmap2, Integer value) {
@@ -109,7 +96,5 @@ public class ReadFromFile {
 	protected int getCoordinates(String key, int position) {
 		String[] arrOfStr = key.split("-");	
 		return Integer.parseInt(arrOfStr[position]);
-	}//end of method getCoordinates()
-	
-	
+	}//end of method getCoordinates()	
 }// end of class ReadFromFile
