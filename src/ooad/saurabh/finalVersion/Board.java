@@ -30,7 +30,7 @@ public class Board extends JPanel implements ActionListener{
 		return nextButton;
 	}
 
-	protected JButton getResignButton() {
+	protected JButton getEndButton() {
 		return endButton;
 	}
 
@@ -42,20 +42,19 @@ public class Board extends JPanel implements ActionListener{
 		return message;
 	}
 	   
-    private CheckersData board;   // The data for the checkers board is kept here.
-					     //  This board is also responsible for generating
-					    //   lists of legal moves.
-
+    private CheckersData board; /* The data for the checkers board is kept here.
+    							   This board is also responsible for generating   
+    							   lists of legal moves. */
+  
 	private boolean gameInProgress; // Is a game currently in progress?
 	
 	/* The next three int variables are valid only when the game is in progress. */	
-	private int currentPlayer;      // Whose turn is it now?  The possible values
-	                       //  are CheckersData.RED and CheckersData.BLACK.
+	private int currentPlayer;   /*Whose turn is it now?  The possible values
+	                              are CheckersData.RED and CheckersData.BLACK. */
 	
-	private int selectedRow, selectedCol;  // If the current player has selected a piece to
-					               //  move, these give the row and column
-					              //  containing that piece.  If no piece is
-					              //  yet selected, then selectedRow is -1.
+	private int selectedRow, selectedCol;  /* If the current player has selected a piece to
+					                          move, these give the row and column containing that piece.  
+					                          If no piece is yet selected, then selectedRow is -1. */
 	
 	private CheckersMove[] legalMoves;  // An array containing the legal moves for the current player.	                            	
 	
@@ -66,9 +65,8 @@ public class Board extends JPanel implements ActionListener{
 	private int loopPtr = 0; // Used as pointer to acces strings inside a string array.
 		
 	/**
-     * Constructor.  Create the buttons and lable.  Listens for mouse
-      * clicks and for clicks on the buttons.  Create the board and
-      * start the first game.
+     * Constructor. Create the buttons and lable.  Listens for clicks on the buttons.
+     * Create the board and start the first game.
      */
     protected Board() {
        setBackground(Color.BLACK);
@@ -86,13 +84,7 @@ public class Board extends JPanel implements ActionListener{
        message.setFont(new  Font("Serif", Font.BOLD, 14));
        message.setForeground(Color.green);
        
-       board = new CheckersData();
-       
-       inputMoves        = new ReadFromFile();
-       boardFromToValues = inputMoves.readInput();
-       counter           = boardFromToValues.length;
-       
-       movesFromFile = inputMoves.boardCoordinates(inputMoves.getMovesFromFile());     
+       board = new CheckersData();     
        doNewGame();
     }//end of constructor
         
@@ -114,6 +106,11 @@ public class Board extends JPanel implements ActionListener{
        gameInProgress = true;
        newGameButton.setEnabled(false);
        endButton.setEnabled(true);
+       inputMoves        = new ReadFromFile();
+       boardFromToValues = inputMoves.readInput();
+       counter           = boardFromToValues.length;  //counter set for number of moves in the input file. 
+       movesFromFile     = inputMoves.boardCoordinates(inputMoves.getMovesFromFile());
+       loopPtr           = 0; // Used as pointer to acces strings inside a string array.
        repaint();
     }//end of method doNewGame
     
@@ -133,8 +130,10 @@ public class Board extends JPanel implements ActionListener{
     	  doSimulateMove(); 
        }
     }//end of method actionPerformed()
-   
-    //This Method simulates the move from the input File when 'Next' button is clicked. 
+    
+    /**
+     * Simulates the move from the input File when 'Next' button is clicked.
+     */
     private void doSimulateMove() {
     	if(gameInProgress == false) {
     		message.setText("Click \"New Game\" to start a new game.");
@@ -172,10 +171,9 @@ public class Board extends JPanel implements ActionListener{
      			loopPtr = loopPtr + 1;     			
      			counter = counter - 1;     			     			
     		 } else {
-    			 counter = boardFromToValues.length;
-    			 loopPtr = 0;
+    			 //If you reach here, it means the moves in the input file are finished.
     			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");
-    			 //add code for ending program execution here.
+    			 System.exit(0);
     		 }
     	}
     }//end of method doSimulateMove()

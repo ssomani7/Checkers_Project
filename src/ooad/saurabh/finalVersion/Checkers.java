@@ -33,15 +33,14 @@ public class Checkers extends JPanel{
 	public Checkers() {	      
 		      setLayout(null); //Use some other layout
 		      setPreferredSize( new Dimension(350,250) );	      
-		      setBackground(new Color(0,150,0));  // Dark green background.
+		      setBackground(new Color(0,150,0));  //Dark green background.
 		      
 		      /* Create the components and add them to the applet. */	      
-		      Board board = new Board();  // The constructor for the
-		                                  // board also creates the buttons
-		                                  // and label.
+		      Board board = new Board(); /*The constructor for board also creates 
+		      							   the buttons and label.*/ 
 		      add(board);
 		      add(board.getNewGameButton());
-		      add(board.getResignButton());
+		      add(board.getEndButton());
 		      add(board.getNextButton()); 
 		      add(board.getMessage());
 		      
@@ -49,7 +48,7 @@ public class Checkers extends JPanel{
 		       its setBounds() method. */		      
 		      board.setBounds(20,20,164,164); // Note:size MUST be 164-by-164 !
 		      board.getNewGameButton().setBounds(210, 30, 120, 30);
-		      board.getResignButton().setBounds(210, 70, 120, 30);
+		      board.getEndButton().setBounds(210, 70, 120, 30);
 		      board.getNextButton().setBounds(210, 120, 120, 30);
 		      board.getMessage().setBounds(0, 200, 350, 30);		      
 		   } // end constructor
