@@ -21,10 +21,11 @@ import javax.swing.JPanel;
 public class Board extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private JButton endButton;     // Button that a player can use to end the game by resigning.
-	private JButton newGameButton; // Button for starting a new game.
-	private JButton nextButton;    // Button for simulating next move
-	private JLabel  message;       // Label for displaying messages to the user.
+	private JButton endButton;      // Button that a player can use to end the game by resigning.
+	private JButton newGameButton;  // Button for starting a new game.
+	private JButton nextButton;     // Button for simulating next move
+	private JButton previousButton; // Button for simulating previous move
+	private JLabel  message;        // Label for displaying messages to the user.
 	
 	protected JButton getNextButton() {
 		return nextButton;
@@ -38,10 +39,14 @@ public class Board extends JPanel implements ActionListener{
 		return newGameButton;
 	}
 
+	protected JButton getPreviousButton() {
+		return previousButton;
+	}
+	
 	protected JLabel getMessage() {
 		return message;
 	}
-	   
+		   
     private CheckersData board; /* The data for the checkers board is kept here.
     							   This board is also responsible for generating   
     							   lists of legal moves. */
@@ -80,8 +85,11 @@ public class Board extends JPanel implements ActionListener{
        nextButton = new JButton("Next");
        nextButton.addActionListener(this); 
        
+       previousButton = new JButton("Previous");
+       previousButton.addActionListener(this);
+       
        message = new JLabel("",JLabel.CENTER);
-       message.setFont(new  Font("Serif", Font.BOLD, 14));
+       message.setFont(new  Font("Comic Sans MS", Font.BOLD, 14));
        message.setForeground(Color.green);
        
        board = new CheckersData();     
@@ -172,7 +180,7 @@ public class Board extends JPanel implements ActionListener{
      			counter = counter - 1;     			     			
     		 } else {
     			 //If you reach here, it means the moves in the input file are finished.
-    			 JOptionPane.showMessageDialog(null, "End of Input Moves from File");
+    			 JOptionPane.showMessageDialog(null, "End of Input Moves from File!!!");
     			 System.exit(0);
     		 }
     	}
