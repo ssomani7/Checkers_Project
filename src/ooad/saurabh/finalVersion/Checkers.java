@@ -1,5 +1,6 @@
 package ooad.saurabh.finalVersion;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -8,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Checkers extends JPanel{
-
+	
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
@@ -30,11 +31,10 @@ public class Checkers extends JPanel{
 	    * the bounds of the components.  A null layout is used.  (This is
 	    * the only thing that is done in the main Checkers class.)
 	    */
-	public Checkers() {	      
-		      setLayout(null); //Use some other layout
+	public Checkers() {
 		      setPreferredSize( new Dimension(350,250) );	      
 		      setBackground(new Color(0,150,0));  //Dark green background.
-		      
+		      		      
 		      /* Create the components and add them to the applet. */	      
 		      Board board = new Board(); /*The constructor for board also creates 
 		      							   the buttons and label.*/ 
@@ -50,6 +50,12 @@ public class Checkers extends JPanel{
 		      board.getNewGameButton().setBounds(210, 30, 120, 30);
 		      board.getEndButton().setBounds(210, 70, 120, 30);
 		      board.getNextButton().setBounds(210, 120, 120, 30);
-		      board.getMessage().setBounds(0, 200, 350, 30);		      
+		      board.getMessage().setBounds(0, 200, 350, 30);
+		      
+		      //Creating and setting Borderlayout
+		      BorderLayout layout = new BorderLayout();
+   	          layout.setHgap(10);
+	          layout.setVgap(10);
+	          setLayout(layout);
 		   } // end constructor
 }// end of class Checkers
